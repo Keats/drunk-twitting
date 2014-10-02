@@ -12,7 +12,7 @@ drunk_hashtags = ['#drunk', '#drinking', '#alcohol', '#beer', '#wine', '#vodka',
 normal_hashtags = ['#python', '#london', '#australia', '#europe', '#sport', '#startups']
 
 
-def get_tweet(number=24, search_for_drunks=True):
+def get_tweet(search_for_drunks=True):
     api_options = {
         'result_type': 'recent',
         'count': 200,
@@ -23,4 +23,4 @@ def get_tweet(number=24, search_for_drunks=True):
         r = api.request('search/tweets', api_options)
     else:
         r = api.request('search/tweets', api_options)
-    return [item['text'].encode('utf-8') for item in list(r.get_iterator())][:number]
+    return [item['text'].encode('utf-8') for item in list(r.get_iterator())]
