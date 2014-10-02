@@ -8,19 +8,30 @@ access_token_secret = "T6GL0dS0hrSOQ3PqD83ezxpASNDa2nax7oykynnuflsTi"
 
 api = TwitterAPI(consumer_key, consumer_secret, access_token_key, access_token_secret)
 
-drunk_hashtags = ['#drunk', '#drinking', '#alcohol', '#beer', '#wine', '#vodka', '#tequila']
-normal_hashtags = ['#python', '#london', '#australia', '#europe', '#sport', '#startups']
+drunk_hashtags = [
+    '#drunk', '#drinking', '#alcohol', '#beer', '#wine', '#vodka', '#tequila', '#happyhour',
+    '#whiskey', '#cider', '#drinks'
+]
+normal_hashtags = [
+    '#python', '#london', '#australia', 'and', '#sport', '#startups', '#bike', '#running',
+    '#windows', '#apple', '#facebook'
+]
 
 
 def get_tweet(search_for_drunks=True):
-    api_options = {
-        'result_type': 'recent',
-        'count': 200,
-        'q': random.choice(drunk_hashtags) if search_for_drunks else random.choice(normal_hashtags)
-    }
-
     if search_for_drunks:
-        r = api.request('search/tweets', api_options)
+        hashtags = drunk_hashtags
     else:
-        r = api.request('search/tweets', api_options)
-    return [item['text'].encode('utf-8') for item in list(r.get_iterator())]
+        hashtags = normal_hashtags
+
+    tweets = []
+
+    for hashtag in hashtags:
+        r = api.request('search/tweets', {
+            'result_type': 'recent',
+            'count': 200,
+            'q': hashtag
+        })
+
+        tweets += [item['text'].encode('utf-8') for item in list(r.get_iterator())]
+    return list(set(tweets))
