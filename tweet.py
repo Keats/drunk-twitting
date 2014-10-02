@@ -11,11 +11,12 @@ api = TwitterAPI(consumer_key, consumer_secret, access_token_key, access_token_s
 
 def get_tweet(number=24, search="#drunk"):
     r = api.request('search/tweets', {'q': search, 'result_type': 'recent'})
-    return [item['text'].decode('utf-8').decode('unicode-escape') for item in list(r.get_iterator())][:number]
+    return [item['text'].encode('utf-8') for item in list(r.get_iterator())][:number]
 
 
 
-search_terms = ['#drunk', '#drinking', '#alcohol', '#hammered' , '#beer', '#wine', '#vodka', '#tequila']
+search_terms = ['#drunk', '#drinking', '#alcohol', '#beer', '#wine', '#vodka', '#tequila']
 for term in search_terms:
     print term
-    pprint.pprint(get_tweet(number=10, search=term))
+    for twit in get_tweet(number=10, search=term):
+        print twit
